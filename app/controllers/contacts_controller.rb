@@ -38,11 +38,16 @@ class ContactsController < ApplicationController
     redirect_to "/contacts/#{contact.id}"
     flash[:info]= "Contact updated"
   end
-
   def destroy
     @contact = Contact.find_by(id: params[:id])
     @contact.destroy
     redirect_to "/contacts"
     flash[:warning]= "Contact destroyed"
+  end
+  def search
+    search_query = params[:search_input]
+    @contacts = Contact.where("name LIKE ? OR email LIKE ?, OR address LIKE ?", "%#{search_query}%", "%#{search_query}%", "%#{search_query}%")
+
+    render :index
   end
 end
